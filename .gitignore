@@ -8,6 +8,12 @@
 ## Get latest from https://github.com/github/gitignore/blob/main/Dotnet.gitignore
 
 # Build results
+[Bb]in/
+[Oo]bj/
+bld/
+artifacts/
+
+# Build configurations
 [Dd]ebug/
 [Dd]ebugPublic/
 [Rr]elease/
@@ -17,16 +23,18 @@ x86/
 [Ww][Ii][Nn]32/
 [Aa][Rr][Mm]/
 [Aa][Rr][Mm]64/
-bld/
-[Bb]in/
-[Oo]bj/
+# Visual Studio user-specific files
+.vs/
+# Logs
 [Ll]og/
 [Ll]ogs/
+
+# Visual Studio
+.vsidx
 
 # .NET Core
 project.lock.json
 project.fragment.lock.json
-artifacts/
 
 # ASP.NET Scaffolding
 ScaffoldingReadMe.txt
