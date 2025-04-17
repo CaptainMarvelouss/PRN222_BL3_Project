@@ -38,9 +38,32 @@ namespace PRN222_BL3_Project.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Field field)
         {
+            if (_context.GetFootballFields().Any(f => f.FieldName == field.FieldName))
+            {
+                ModelState.AddModelError("FieldName", "A field with this name already exists.");
+            }
+            if(field.FieldName == null || field.FieldType == null)
+            {
+                ModelState.AddModelError("", "Name and Type cannot be empty.");
+            }
+            if (ModelState.TryGetValue("Price", out var priceEntry) && priceEntry.Errors.Any())
+            {
+                // Model binding failed (e.g., non-numeric input like "abc")
+                ModelState.AddModelError("Price", "Price must be a valid number.");
+            }
+            else if (field.Price < 0)
+            {
+                ModelState.AddModelError("Price", "Price cannot be negative.");
+            }
+            if (field.Status == null)
+            {
+                ModelState.AddModelError("Status", "Please choose a status.");
+            }
+
             if (ModelState.IsValid)
             {
                 _context.AddFootballField(field);
+                TempData["SuccessMessage"] = "Field created successfully.";
                 return RedirectToAction(nameof(Index));
             }
             return View(field);
@@ -70,6 +93,28 @@ namespace PRN222_BL3_Project.Areas.Admin.Controllers
             if (id != field.FieldId)
             {
                 return NotFound();
+            }
+
+            if (_context.GetFootballFields().Any(f => f.FieldId != id && f.FieldName == field.FieldName))
+            {
+                ModelState.AddModelError("FieldName", "A field with this name already exists.");
+            }
+            if (field.FieldName == null || field.FieldType == null)
+            {
+                ModelState.AddModelError("", "Name and Type cannot be empty.");
+            }
+            if (ModelState.TryGetValue("Price", out var priceEntry) && priceEntry.Errors.Any())
+            {
+                // Model binding failed (e.g., non-numeric input like "abc")
+                ModelState.AddModelError("Price", "Price must be a valid number.");
+            }
+            else if (field.Price < 0)
+            {
+                ModelState.AddModelError("Price", "Price cannot be negative.");
+            }
+            if (field.Status == null)
+            {
+                ModelState.AddModelError("Status", "Please choose a status.");
             }
 
             if (ModelState.IsValid)
