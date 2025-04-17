@@ -1,6 +1,8 @@
 using BusinessObjects;
+using DataAccessObjects;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
+using Repositories;
 
 namespace PRN222_BL3_Project
 {
@@ -12,6 +14,8 @@ namespace PRN222_BL3_Project
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
+            builder.Services.AddScoped<IFootballFieldRepository, FootballFieldRepository>();
 
             builder.Services.AddDbContext<FootballFieldBookingContext>(options =>
             {
