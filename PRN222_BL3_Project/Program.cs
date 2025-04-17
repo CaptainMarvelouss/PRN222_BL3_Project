@@ -25,6 +25,11 @@ namespace PRN222_BL3_Project
                      options.SlidingExpiration = true;
                      options.LoginPath = "/Auth/Login";
                      options.AccessDeniedPath = "/Forbidden/";
+                 })
+                 .AddGoogle(googleoptions =>
+                 {
+                     googleoptions.ClientId = builder.Configuration["Authentication:Google:ClientId"];
+                     googleoptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
                  });
 
             var app = builder.Build();
