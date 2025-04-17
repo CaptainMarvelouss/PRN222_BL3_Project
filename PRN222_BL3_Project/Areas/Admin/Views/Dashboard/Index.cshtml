@@ -4,5 +4,76 @@
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Admin Page</h1>
+<!-- Dashboard Content -->
+<div class="row">
+    <!-- Statistic Cards -->
+    <div class="col-xl-3 col-md-6">
+        <div class="card stats-card">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="icon-circle bg-primary me-3">
+                        <i class="ti ti-soccer-field text-white"></i>
+                    </div>
+                    <div>
+                        <h6 class="m-0">Booking History</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6">
+        <div class="card stats-card">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="icon-circle bg-success me-3">
+                        <i class="ti ti-users text-white"></i>
+                    </div>
+                    <div>
+                        <h6 class="m-0">User Management</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6">
+        <div class="card stats-card">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="icon-circle bg-info me-3">
+                        <i class="ti ti-calendar text-white"></i>
+                    </div>
+                    <div>
+                        <h6 class="m-0">Field Management</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6">
+        <div class="card stats-card">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="icon-circle bg-warning me-3">
+                        <i class="ti ti-currency-dollar text-white"></i>
+                    </div>
+                    <div>
+                        <h6 class="m-0">Revenue</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chart Section -->
+    <div class="col-xl-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>Revenue Overview</h5>
+            </div>
+            <div class="card-body">
+                <div id="revenue-chart"></div>
+            </div>
+        </div>
+    </div>
+</div>
 

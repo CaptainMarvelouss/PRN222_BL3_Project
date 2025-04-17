@@ -5,60 +5,167 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - PRN222_BL3_Project</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/PRN222_BL3_Project.styles.css" asp-append-version="true" />
+    <title>@ViewData["Title"] - Admin Management</title>
+    <!-- [Favicon] icon -->
+    <link rel="icon" href="~/Admin/assets/images/favicon.svg" type="image/x-icon"> <!-- [Google Font] Family -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&display=swap" id="main-font-link">
+    <!-- [Tabler Icons] https://tablericons.com -->
+    <link rel="stylesheet" href="~/Admin/assets/fonts/tabler-icons.min.css">
+    <!-- [Feather Icons] https://feathericons.com -->
+    <link rel="stylesheet" href="~/Admin/assets/fonts/feather.css">
+    <!-- [Font Awesome Icons] https://fontawesome.com/icons -->
+    <link rel="stylesheet" href="~/Admin/assets/fonts/fontawesome.css">
+    <!-- [Material Icons] https://fonts.google.com/icons -->
+    <link rel="stylesheet" href="~/Admin/assets/fonts/material.css">
+    <!-- [Template CSS Files] -->
+    <link rel="stylesheet" href="~/Admin/assets/css/style.css" id="main-style-link">
+    <link rel="stylesheet" href="~/Admin/assets/css/style-preset.css">
 </head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">PRN222_BL3_Project</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                        @if (!User.Identity.IsAuthenticated)
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Auth" asp-action="Login">Login</a>
-                            </li>
-                        }
-                        else
-                        {
-                            @* <span class="ms-2">Hi, @User.FindFirstValue(ClaimTypes.Name)</span> *@
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Auth" asp-action="Logout">Logout</a>
-                            </li>
-                        }
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - PRN222_BL3_Project - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+<body data-pc-preset="preset-1" data-pc-direction="ltr" data-pc-theme="light">
+    <div class="loader-bg">
+        <div class="loader-track">
+            <div class="loader-fill"></div>
         </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    </div>
+   
+    <!-- [ Sidebar Menu ] start -->
+    <nav class="pc-sidebar">
+        <div class="navbar-wrapper">
+            <div class="m-header">
+                <a href="#" class="b-brand text-primary">
+                    <!-- ========   Change your logo from here   ============ -->
+                    <img src="/Admin/assets/images/logo-dark.svg" class="img-fluid logo-lg" alt="logo">
+                </a>
+            </div>
+            <div class="navbar-content">
+                <ul class="pc-navbar">
+                    <li class="pc-item">
+                        <a asp-controller="Dashboard" asp-action="Index" class="pc-link">
+                            <span class="pc-micon"><i class="ti ti-dashboard"></i></span>
+                            <span class="pc-mtext">Dashboard</span>
+                        </a>
+                    </li>
+
+                    <li class="pc-item pc-caption">
+                        <label>UI Components</label>
+                        <i class="ti ti-dashboard"></i>
+                    </li>
+                    <li class="pc-item">
+                        <a href="#" class="pc-link">
+                            <span class="pc-micon"><i class="ti ti-color-swatch"></i></span>
+                            <span class="pc-mtext">Booking History</span>
+                        </a>
+                    </li>
+                    <li class="pc-item">
+                        <a asp-controller="FootballField" asp-action="Index" class="pc-link">
+                            <span class="pc-micon"><i class="ti ti-color-swatch"></i></span>
+                            <span class="pc-mtext">Field Management</span>
+                        </a>
+                    </li>
+                    <li class="pc-item">
+                        <a asp-controller="User" asp-action="Index" class="pc-link">
+                            <span class="pc-micon"><i class="ti ti-color-swatch"></i></span>
+                            <span class="pc-mtext">User Management</span>
+                        </a>
+                    </li>
+                    <li class="pc-item">
+                        <a href="#" class="pc-link">
+                            <span class="pc-micon"><i class="ti ti-color-swatch"></i></span>
+                            <span class="pc-mtext">Revenue</span>
+                        </a>
+                    </li>
+                    <li class="pc-item pc-caption">
+                        <label>Pages</label>
+                        <i class="ti ti-news"></i>
+                    </li>
+                    <li class="pc-item">
+                        <a href="#" class="pc-link">
+                            <span class="pc-micon"><i class="ti ti-lock"></i></span>
+                            <span class="pc-mtext">Login</span>
+                        </a>
+                    </li>
+                    <li class="pc-item">
+                        <a href="#" class="pc-link">
+                            <span class="pc-micon"><i class="ti ti-user-plus"></i></span>
+                            <span class="pc-mtext">Register</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- [ Sidebar Menu ] end -->
+    <!-- [ Header Topbar ] start -->
+    <header class="pc-header">
+        <div class="header-wrapper">
+            <!-- [Mobile Media Block] start -->
+            <div class="me-auto pc-mob-drp">
+                <ul class="list-unstyled">
+                    <!-- ======= Menu collapse Icon ===== -->
+                    <li class="pc-h-item pc-sidebar-collapse">
+                        <a href="#" class="pc-head-link ms-0" id="sidebar-hide">
+                            <i class="ti ti-menu-2"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <!-- [Mobile Media Block end] -->
+            <div class="ms-auto">
+                <ul class="list-unstyled">
+                    <li class="dropdown pc-h-item header-user-profile">
+                        <a class="pc-head-link dropdown-toggle arrow-none me-0">
+                            <span>Stebin Ben</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </header>
+    <!-- [ Header ] end -->
+    <!-- [ Main Content ] start -->
+    <div class="pc-container">
+        <div class="pc-content">
+          <!-- [ breadcrumb ] start -->
+          <div class="page-header">
+            <div class="page-block">
+              <div class="row align-items-center">
+                <div class="col-md-12">
+                  <div class="page-header-title">
+                    <h5 class="m-b-10">Home</h5>
+                  </div>
+                  <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="../dashboard/index.html">Home</a></li>
+                    <li class="breadcrumb-item"><a href="javascript: void(0)">Dashboard</a></li>
+                    <li class="breadcrumb-item" aria-current="page">Home</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- [ breadcrumb ] end -->
+
+            @RenderBody()
+        </div>
+    </div>
+    <!-- [ Main Content ] end -->
+
+    <!-- [Page Specific JS] start -->
+    <script src="~/Admin/assets/js/plugins/apexcharts.min.js"></script>
+    <script src="~/Admin/assets/js/pages/dashboard-default.js"></script>
+    <!-- [Page Specific JS] end -->
+    <!-- Required Js -->
+    <script src="~/Admin/assets/js/plugins/popper.min.js"></script>
+    <script src="~/Admin/assets/js/plugins/simplebar.min.js"></script>
+    <script src="~/Admin/assets/js/plugins/bootstrap.min.js"></script>
+    <script src="~/Admin/assets/js/fonts/custom-font.js"></script>
+    <script src="~/Admin/assets/js/pcoded.js"></script>
+    <script src="~/Admin/assets/js/plugins/feather.min.js"></script>
+    <script>layout_change('light');</script>
+    <script>change_box_container('false');</script>
+    <script>layout_rtl_change('false');</script>
+    <script>preset_change("preset-1");</script>
+    <script>font_change("Public-Sans");</script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
