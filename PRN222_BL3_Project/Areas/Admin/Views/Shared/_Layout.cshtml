@@ -115,7 +115,15 @@
                 <ul class="list-unstyled">
                     <li class="dropdown pc-h-item header-user-profile">
                         <a class="pc-head-link dropdown-toggle arrow-none me-0">
-                            <span>Stebin Ben</span>
+                            @if (!User.Identity.IsAuthenticated)
+                            {
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Auth" asp-action="Login">Login</a>
+                            }
+                            else
+                            {
+                                <span>Hi, @User.FindFirstValue(ClaimTypes.Name)</span>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Auth" asp-action="Logout"> || Logout</a>
+                            }
                         </a>
                     </li>
                 </ul>
