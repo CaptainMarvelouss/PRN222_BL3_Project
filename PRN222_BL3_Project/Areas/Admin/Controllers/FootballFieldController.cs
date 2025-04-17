@@ -7,10 +7,12 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BusinessObjects;
 using Repositories;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PRN222_BL3_Project.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
     public class FootballFieldController : Controller
     {
         private readonly IFootballFieldRepository _context;
@@ -63,7 +65,7 @@ namespace PRN222_BL3_Project.Areas.Admin.Controllers
             if (ModelState.IsValid)
             {
                 _context.AddFootballField(field);
-                TempData["SuccessMessage"] = "Field created successfully.";
+                TempData["FieldSuccess"] = "Field created successfully.";
                 return RedirectToAction(nameof(Index));
             }
             return View(field);
@@ -122,6 +124,7 @@ namespace PRN222_BL3_Project.Areas.Admin.Controllers
                 try
                 {
                     _context.UpdateFootballField(field);
+                    TempData["FieldSuccess"] = "Field updated successfully.";
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -165,6 +168,7 @@ namespace PRN222_BL3_Project.Areas.Admin.Controllers
             if (field != null)
             {
                 _context.DeleteFootballField(field);
+                TempData["FieldSuccess"] = "Field deleted successfully.";
             }
             return RedirectToAction(nameof(Index));
         }

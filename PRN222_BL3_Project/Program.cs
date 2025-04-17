@@ -15,6 +15,7 @@ namespace PRN222_BL3_Project
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IFootballFieldRepository, FootballFieldRepository>();
 
             builder.Services.AddDbContext<FootballFieldBookingContext>(options =>
