@@ -40,7 +40,8 @@ namespace PRN222_BL3_Project.Controllers
             var info = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             if (info.Principal == null)
             {
-                return RedirectToAction(nameof(Login));
+				ModelState.AddModelError("", "Authentication failed. Please try again.");
+				return RedirectToAction(nameof(Login));
             }
 
             var email = info.Principal.FindFirstValue(ClaimTypes.Email);
@@ -62,6 +63,12 @@ namespace PRN222_BL3_Project.Controllers
                 };
                 _context.Users.Add(user);
                 await _context.SaveChangesAsync();
+            }
+
+            if (user.PasswordHash == "blocked")
+            {
+                TempData["BlockMessage"] = "Your account is blocked. Please contact the administrator.";
+                return RedirectToAction(nameof(Login));
             }
 
             var claims = new List<Claim>

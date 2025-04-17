@@ -1,4 +1,4 @@
-﻿@model IEnumerable<BusinessObjects.Field>
+﻿@model IEnumerable<BusinessObjects.User>
 
 @{
     ViewData["Title"] = "Index";
@@ -7,16 +7,16 @@
 
 <div class="row">
     <div class="col-md-6">
-        <h3>Field Management</h3>
+        <h3>User Management</h3>
         <p>
-            <a asp-action="Create">Create New</a>
+            @* <a asp-action="Create">Create New</a> *@
         </p>
     </div>
-    <div class="col-md-4">
-        @if (TempData["FieldSuccess"] != null)
+    <div class="col-md-6">
+        @if (TempData["UpdateUserSuccess"] != null)
         {
             <div class="alert alert-success alert-dismissible fade show" role="alert">
-                @TempData["FieldSuccess"]
+                @TempData["UpdateUserSuccess"]
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -29,19 +29,22 @@
     <thead>
         <tr>
             <th>
-                Field Name
+                Name
             </th>
             <th>
-                Field Type
+                @Html.DisplayNameFor(model => model.Phone)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Price)
+                @Html.DisplayNameFor(model => model.Email)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Status)
+                @Html.DisplayNameFor(model => model.GoogleId)
             </th>
             <th>
-                Created At
+                CreatedAt
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Role)
             </th>
             <th></th>
         </tr>
@@ -50,23 +53,31 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.FieldName)
+                @Html.DisplayFor(modelItem => item.UserName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.FieldType)
+                @Html.DisplayFor(modelItem => item.Phone)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Price)
+                @Html.DisplayFor(modelItem => item.Email)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Status)
+                @Html.DisplayFor(modelItem => item.GoogleId)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.CreatedAt)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.FieldId">Edit</a> |
-                <a asp-action="Delete" asp-route-id="@item.FieldId">Delete</a>
+                @Html.DisplayFor(modelItem => item.Role.RoleName)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.UserId">Edit</a> |
+                @if(item.PasswordHash != "blocked")
+                {
+                    <a asp-action="Block" asp-route-id="@item.UserId">Block</a>
+                }else{
+                    <a asp-action="Unblock" asp-route-id="@item.UserId">Unblock</a>
+                }
             </td>
         </tr>
 }
