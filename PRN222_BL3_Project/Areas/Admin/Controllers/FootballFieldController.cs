@@ -38,7 +38,7 @@ namespace PRN222_BL3_Project.Areas.Admin.Controllers
         // POST: Admin/FootballField/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Field field)
+        public async Task<IActionResult> Create(Field field, IFormFile imageFile)
         {
             if (_context.GetFootballFields().Any(f => f.FieldName == field.FieldName))
             {
@@ -62,8 +62,31 @@ namespace PRN222_BL3_Project.Areas.Admin.Controllers
                 ModelState.AddModelError("Status", "Please choose a status.");
             }
 
+            if (imageFile == null || imageFile.Length == 0)
+            {
+                ModelState.AddModelError("ImageFile", "Image is required.");
+            }
+            else
+            {
+                var validExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif" };
+                var extension = Path.GetExtension(imageFile.FileName).ToLower();
+                if (!validExtensions.Contains(extension))
+                {
+                    ModelState.AddModelError("ImageFile", "Invalid image format. Only .jpg, .jpeg, .png, .gif are allowed.");
+                }
+            }
+
             if (ModelState.IsValid)
             {
+                var extension = Path.GetExtension(imageFile.FileName).ToLower();
+                var fileName = Guid.NewGuid().ToString() + extension;
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Admin/uploads/footballFields", fileName);
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await imageFile.CopyToAsync(stream);
+                }
+
+                field.Image = fileName;
                 _context.AddFootballField(field);
                 TempData["FieldSuccess"] = "Field created successfully.";
                 return RedirectToAction(nameof(Index));
@@ -90,7 +113,7 @@ namespace PRN222_BL3_Project.Areas.Admin.Controllers
         // POST: Admin/FootballField/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Field field)
+        public async Task<IActionResult> Edit(int id, Field field, IFormFile? imageFile)
         {
             if (id != field.FieldId)
             {
@@ -119,10 +142,46 @@ namespace PRN222_BL3_Project.Areas.Admin.Controllers
                 ModelState.AddModelError("Status", "Please choose a status.");
             }
 
+            if (imageFile != null && imageFile.Length > 0)
+            {
+                var validExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif" };
+                var extension = Path.GetExtension(imageFile.FileName).ToLower();
+                if (!validExtensions.Contains(extension))
+                {
+                    ModelState.AddModelError("ImageFile", "Invalid image format. Only .jpg, .jpeg, .png, .gif are allowed.");
+                }
+            }
+
             if (ModelState.IsValid)
             {
                 try
                 {
+                    var existingField = _context.GetFootballFieldById(id);
+                    if (imageFile != null && imageFile.Length > 0)
+                    {
+                        if (!string.IsNullOrEmpty(existingField?.Image))
+                        {
+                            var oldFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Admin/uploads/footballFields", existingField.Image);
+                            if (System.IO.File.Exists(oldFilePath))
+                            {
+                                System.IO.File.Delete(oldFilePath);
+                            }
+                        }
+
+                        var extension = Path.GetExtension(imageFile.FileName).ToLower();
+                        var fileName = Guid.NewGuid().ToString() + extension;
+                        var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Admin/uploads/footballFields", fileName);
+                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await imageFile.CopyToAsync(stream);
+                        }
+                        field.Image = fileName;
+                    }
+                    else
+                    {
+                        field.Image = existingField?.Image;
+                    }
+
                     _context.UpdateFootballField(field);
                     TempData["FieldSuccess"] = "Field updated successfully.";
                 }
@@ -167,6 +226,15 @@ namespace PRN222_BL3_Project.Areas.Admin.Controllers
             var field = _context.GetFootballFieldById(id);
             if (field != null)
             {
+                if (!string.IsNullOrEmpty(field.Image))
+                {
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Admin/uploads/footballFields", field.Image);
+                    if (System.IO.File.Exists(filePath))
+                    {
+                        System.IO.File.Delete(filePath);
+                    }
+                }
+
                 _context.DeleteFootballField(field);
                 TempData["FieldSuccess"] = "Field deleted successfully.";
             }
