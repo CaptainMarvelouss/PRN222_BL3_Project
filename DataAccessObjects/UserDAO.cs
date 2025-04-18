@@ -69,7 +69,7 @@ namespace DataAccessObjects
                 {
                     throw new Exception("User not found.");
                 }
-                existingUser.PasswordHash = "blocked";
+                existingUser.IsBlocked = true;
                 context.Entry<User>(existingUser).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                 context.SaveChanges();
             }
@@ -89,7 +89,7 @@ namespace DataAccessObjects
                 {
                     throw new Exception("User not found.");
                 }
-                existingUser.PasswordHash = null;
+                existingUser.IsBlocked = false;
                 context.Entry<User>(existingUser).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                 context.SaveChanges();
             }

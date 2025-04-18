@@ -21,6 +21,8 @@ public partial class User
 
     public DateTime? CreatedAt { get; set; }
 
+    public bool? IsBlocked { get; set; }
+
     public virtual ICollection<Booking> Bookings { get; set; } = new List<Booking>();
 
     public virtual ICollection<FeedBack> FeedBacks { get; set; } = new List<FeedBack>();

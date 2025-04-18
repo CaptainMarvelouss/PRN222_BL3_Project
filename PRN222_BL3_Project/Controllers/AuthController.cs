@@ -65,7 +65,7 @@ namespace PRN222_BL3_Project.Controllers
                 await _context.SaveChangesAsync();
             }
 
-            if (user.PasswordHash == "blocked")
+            if (user.IsBlocked == true)
             {
                 TempData["BlockMessage"] = "Your account is blocked. Please contact the administrator.";
                 return RedirectToAction(nameof(Login));
