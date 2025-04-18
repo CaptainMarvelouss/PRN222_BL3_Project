@@ -72,7 +72,7 @@
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.UserId">Edit</a> |
-                @if(item.PasswordHash != "blocked")
+                @if(item.IsBlocked != true)
                 {
                     <a asp-action="Block" asp-route-id="@item.UserId">Block</a>
                 }else{

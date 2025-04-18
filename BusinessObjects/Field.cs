@@ -17,6 +17,8 @@ public partial class Field
 
     public DateTime? CreatedAt { get; set; }
 
+    public string? Image { get; set; }
+
     public virtual ICollection<BookingTimeSlot> BookingTimeSlots { get; set; } = new List<BookingTimeSlot>();
 
     public virtual ICollection<Booking> Bookings { get; set; } = new List<Booking>();

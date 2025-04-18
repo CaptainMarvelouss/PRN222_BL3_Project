@@ -145,6 +145,9 @@ public partial class FootballFieldBookingContext : DbContext
                 .HasMaxLength(20)
                 .IsUnicode(false)
                 .HasColumnName("fieldType");
+            entity.Property(e => e.Image)
+                .HasMaxLength(255)
+                .HasColumnName("image");
             entity.Property(e => e.Price)
                 .HasColumnType("decimal(10, 2)")
                 .HasColumnName("price");
@@ -197,6 +200,9 @@ public partial class FootballFieldBookingContext : DbContext
                 .HasMaxLength(100)
                 .IsUnicode(false)
                 .HasColumnName("googleId");
+            entity.Property(e => e.IsBlocked)
+                .HasDefaultValue(false)
+                .HasColumnName("isBlocked");
             entity.Property(e => e.PasswordHash)
                 .HasMaxLength(255)
                 .IsUnicode(false)
