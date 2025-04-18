@@ -23,10 +23,32 @@ namespace PRN222_BL3_Project.Areas.Admin.Controllers
         }
 
         // GET: Admin/FootballField
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int currentPage = 1, int pageSize = 3, string? search = null)
         {
-            var footballFields = _context.GetFootballFields();
-            return View(footballFields);
+            var footballFields = _context.GetFootballFields().AsQueryable();
+
+            //Search
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                footballFields = footballFields.Where(u => u.FieldName.Contains(search));
+
+                var searchResultCount = footballFields.Count();
+                if (searchResultCount == 0)
+                {
+                    ViewBag.NoResults = $"No results found for '{search}'.";
+                }
+            }
+
+            //Pagination
+            var itemCount = _context.GetFootballFields().Count();
+            var items = footballFields.Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
+
+            // Pass data to view
+            ViewBag.CurrentPage = currentPage;
+            ViewBag.TotalPages = (int)Math.Ceiling(itemCount / (float)pageSize);
+            ViewBag.SearchQuery = search;
+
+            return View(items);
         }
 
         // GET: Admin/FootballField/Create
