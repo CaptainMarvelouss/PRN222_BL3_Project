@@ -25,5 +25,5 @@ public partial class User
 
     public virtual ICollection<FeedBack> FeedBacks { get; set; } = new List<FeedBack>();
 
-    public virtual Role Role { get; set; } = null!;
+    public virtual Role? Role { get; set; }
 }
