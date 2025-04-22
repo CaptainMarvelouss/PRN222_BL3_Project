@@ -1,0 +1,340 @@
+﻿/* Global Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+}
+
+body {
+    line-height: 1.6;
+    color: #333;
+}
+/* Navigation Styles */
+/*nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background-color: var(--light-color);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.nav-links {
+    display: flex;
+    gap: 20px;
+}
+
+    .nav-links a {
+        text-decoration: none;
+        color: var(--dark-color);
+        font-weight: 600;
+    }
+
+.logo {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+    .logo img {
+        height: 30px;
+    }
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.language-selector {
+    display: flex;
+    gap: 5px;
+}
+
+    .language-selector a {
+        text-decoration: none;
+        color: var(--dark-color);
+        font-weight: 600;
+    }
+
+.profile-icon {
+    width: 30px;
+    height: 30px;
+    background-color: var(--dark-color);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--light-color);
+    font-weight: bold;*/
+
+/*     Field Details Container */
+    .field-details-container {
+    height: 90vh;
+    width: 100%;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 3rem;
+}
+
+.field-details-overlay {
+    position: relative;
+    width: 50%;
+    padding: 2rem;
+    color: white;
+    text-align: right;
+}
+
+.field-details-title {
+    font-size: 4rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    line-height: 1;
+    margin-bottom: 1.5rem;
+    letter-spacing: 1px;
+}
+
+.field-details-address {
+    font-size: 1.8rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+.field-details-phone {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+    .field-details-phone::before {
+        content: "+1 (917) 993-1008";
+        margin-right: 0.5rem;
+    }
+
+.book-now-box {
+    display: inline-block;
+    background-color: #7fff00;
+    color: #000;
+    font-weight: bold;
+    padding: 1rem 3rem;
+    text-decoration: none;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    margin: 1rem 0 2rem;
+    transition: all 0.3s ease;
+}
+
+    .book-now-box:hover {
+        background-color: #6ae400;
+    }
+
+    .book-now-box::after {
+        content: " →";
+    }
+
+.field-description {
+    text-align: right;
+    font-size: 1rem;
+    margin-top: 2rem;
+}
+
+    .field-description p {
+        margin-bottom: 0.5rem;
+    }
+
+    .field-description i {
+        margin-right: 0.5rem;
+        color: #7fff00;
+    }
+
+/* Footer */
+.field-footer {
+    background-color: #f2f2f2;
+    padding: 3rem 2rem 1rem;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+    .footer-content > div {
+        flex: 1;
+        margin: 0 1rem;
+    }
+
+    .footer-content h3 {
+        font-size: 1.5rem;
+        text-transform: uppercase;
+        font-weight: 800;
+        margin-bottom: 1.5rem;
+        line-height: 1.2;
+    }
+
+    .footer-content h4 {
+        font-size: 1rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        text-transform: uppercase;
+    }
+
+.btn-black {
+    display: inline-block;
+    background-color: #000;
+    color: white;
+    text-decoration: none;
+    padding: 0.8rem 1.5rem;
+    font-size: 0.9rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-top: 1rem;
+}
+
+.footer-content ul {
+    list-style: none;
+}
+
+    .footer-content ul li {
+        margin-bottom: 0.5rem;
+    }
+
+        .footer-content ul li a {
+            color: #333;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+            .footer-content ul li a:hover {
+                text-decoration: underline;
+            }
+
+.footer-content form {
+    display: flex;
+    margin-bottom: 1.5rem;
+}
+
+.footer-content input[type="email"] {
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    flex-grow: 1;
+}
+
+.footer-content button {
+    background-color: #000;
+    color: white;
+    border: none;
+    padding: 0 1rem;
+    cursor: pointer;
+}
+
+.socials {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+    .socials a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.5rem;
+        height: 2.5rem;
+        background-color: #000;
+        color: white;
+        border-radius: 50%;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+        .socials a:hover {
+            background-color: #333;
+        }
+
+/* Responsive Design */
+@media (max-width: 992px) {
+    .field-details-overlay {
+        width: 70%;
+    }
+
+    .footer-content {
+        flex-direction: column;
+    }
+
+        .footer-content > div {
+            margin-bottom: 2rem;
+        }
+}
+
+@media (max-width: 768px) {
+    .field-details-container {
+        height: auto;
+        min-height: 80vh;
+        padding: 2rem 1rem;
+    }
+
+    .field-details-overlay {
+        width: 100%;
+        text-align: center;
+    }
+
+    .field-description {
+        text-align: center;
+    }
+
+    .field-details-phone {
+        justify-content: center;
+    }
+}
+
+/* Additional styling to match the image */
+.fa-trophy {
+    color: #ffd700;
+}
+
+.fa-check {
+    color: #7fff00;
+}
+
+/* Navigation (to match the header in the image) */
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background-color: white;
+}
+
+    nav ul {
+        display: flex;
+        list-style: none;
+    }
+
+        nav ul li {
+            margin-left: 2rem;
+        }
+
+            nav ul li a {
+                text-decoration: none;
+                color: #333;
+                text-transform: uppercase;
+                font-weight: 500;
+            }
+
+/* Logo Styles */
+.logo {
+    height: 40px;
+}

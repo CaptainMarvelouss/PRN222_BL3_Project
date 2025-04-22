@@ -17,8 +17,8 @@
 <nav>
     <div class="nav-links">
         <a asp-controller="Home" asp-action="Index">Home</a>
-        <a href="#">Rent a field</a>
-        <a href="#">News</a>
+        @* <a href="#">Rent a field</a> *@
+        @* <a href="#">News</a> *@
     </div>
 
     <div class="logo">
@@ -64,13 +64,13 @@
 <div class="locations-grid">
     @foreach (var field in Model)
     {
-        <a asp-page="/Rent" asp-route-id="@field.FieldId" class="location-card-link">
+        <a asp-controller="Details" asp-action="Details" asp-route-id="@field.FieldId" class="location-card-link">
             <div class="location-card">
-                <img src="@field.Image" alt="@field.FieldName" />
+                <img src="~/Images/@field.Image" alt="@field.FieldName" />
                 <div class="location-info">
                     <h3 class="location-title">@field.FieldName</h3>
                     <p class="location-type">Type: @field.FieldType</p>
-                    <p class="location-phone">Price: @field.Price.ToString("C")</p>
+                    <p class="location-phone">Price: @($"{field.Price:N0} ₫")</p>
                     <p class="location-phone">Status: @field.Status</p>
                 </div>
             </div>
@@ -103,12 +103,12 @@
         </div>
 
         <div class="footer-newsletter">
-            @* <h3>SUBSCRIBE TO OUR NEWSLETTER</h3> *@
-            @* <p>Sign up for exclusive offers</p> *@
-            @* <form class="newsletter-form" method="post" asp-page-handler="Subscribe"> *@
-            @*     <input type="email" name="email" placeholder="Your email..." required> *@
-            @*     <button type="submit">→</button> *@
-            @* </form> *@
+              <h3>SUBSCRIBE TO OUR NEWSLETTER</h3>  
+              <p>Sign up for exclusive offers</p>  
+              <form class="newsletter-form" method="post" asp-page-handler="Subscribe">  
+                  <input type="email" name="email" placeholder="Your email..." required>  
+                  <button type="submit">→</button>  
+              </form> 
             <p>FOLLOW US</p>
             <div class="social-icons">
                 <a href="#" class="social-icon">I</a>
