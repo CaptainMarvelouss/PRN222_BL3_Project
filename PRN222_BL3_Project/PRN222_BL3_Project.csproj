@@ -23,6 +23,7 @@
   <ItemGroup>
     <Folder Include="Areas\Admin\Models\" />
     <Folder Include="wwwroot\Admin\uploads\footballFields\" />
+    <Folder Include="wwwroot\Images\" />
   </ItemGroup>
 
 </Project>
