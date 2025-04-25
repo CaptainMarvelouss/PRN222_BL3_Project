@@ -30,7 +30,7 @@ namespace ProjectPRN222_BL3_Project.Services
             vnpay.AddRequestData("vnp_OrderType", "other");
 
             // 🔥 Cập nhật Return URL
-            var returnUrl = "https://localhost:7183/Payment/PaymentCallBack"; 
+            var returnUrl = "https://localhost:7169/Payment/PaymentCallBack"; 
             vnpay.AddRequestData("vnp_ReturnUrl", returnUrl);
 
             vnpay.AddRequestData("vnp_TxnRef", tick);

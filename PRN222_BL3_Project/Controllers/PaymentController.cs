@@ -3,41 +3,34 @@ using Microsoft.AspNetCore.Mvc;
 using BusinessObjects;
 using Newtonsoft.Json;
 using ProjectPRN222_BL3_Project.Services;
-using Repositories.IRepositories;
 using ProjectPRN222_BL3_Project.Helper;
+using Repositories;
 
 namespace ProjectPRN222_BL3_Project.Controllers
 {
     public class PaymentController : Controller
     {
         private readonly IVnPayService _vnPayService;
-        //private readonly ITotalInvoicePitchRepository totalInvoicePitchRepository;
-        private readonly IBookingRepository bookingRepository;
-        //private readonly IBookingTimeRepository bookingTimeRepository;
-        //private readonly IPitchRepository pitchRepository;
-        public PaymentController(IVnPayService vnPayService)//, ITotalInvoicePitchRepository totalInvoicePitchRepo,
-        //IInvoicePitchRepository invoicePitchRepo,
-        //IBookingTimeRepository bookingTimeRepo,
-        //IPitchRepository pitchRepo)
+        private readonly IBookingRepository _bookingRepository;
+        
+        public PaymentController(IVnPayService vnPayService, IBookingRepository bookingRepository)
+
         {
             _vnPayService = vnPayService;
-            /*totalInvoicePitchRepository = totalInvoicePitchRepo;
-            invoicePitchRepository = invoicePitchRepo;
-            bookingTimeRepository = bookingTimeRepo;
-            pitchRepository = pitchRepo;*/
+            _bookingRepository = bookingRepository;
         }
 
         [HttpPost]
-        public IActionResult Checkout(string pitchId, decimal pricePitch, List<int> selectedTimes)
+        public IActionResult Checkout(string fieldId, decimal priceField, List<int> selectedTimes)
         {
             if (selectedTimes == null || !selectedTimes.Any())
             {
                 TempData["ErrorMessage"] = "Vui lòng chọn ít nhất một khung giờ để thanh toán.";
-                return RedirectToAction("Details", "Pitches", new { id = pitchId });
+                return RedirectToAction("Booking", "Booking");
             }
 
             var orderId = new Random().Next(100000, 999999);
-            var totalAmount = selectedTimes.Count * pricePitch;
+            var totalAmount = selectedTimes.Count * priceField;
 
             Console.WriteLine("Total Amount: " + totalAmount);
             
@@ -51,70 +44,71 @@ namespace ProjectPRN222_BL3_Project.Controllers
             };
 
             HttpContext.Session.SetString("OrderId", orderId.ToString());
-            HttpContext.Session.SetString("PitchId", pitchId);
-            
-            HttpContext.Session.SetString("PricePitch", pricePitch.ToString());
+            HttpContext.Session.SetString("FieldId", fieldId);
+            HttpContext.Session.SetString("PriceField", priceField.ToString());
             HttpContext.Session.SetString("SelectedTimes", string.Join(",", selectedTimes));
-            var filterdate = DateTime.Parse(HttpContext.Session.GetString("FilterDate"));
-            Console.WriteLine("Filter dâte " + filterdate);
-            Console.WriteLine("Redirecting to payment...");
+            var filterdate = DateTime.Parse(HttpContext.Session.GetString("SelectedDate"));
             var paymentUrl = _vnPayService.CreatePaymentUrl(HttpContext, paymentRequest);
             return Redirect(paymentUrl);
         }
 
+         
 
-
-        /*public IActionResult PaymentCallBack()
+        public async Task<IActionResult> PaymentCallBack()
         {
             var response = _vnPayService.PaymentExecute(Request.Query);
 
             if (response.Success)
             {
                 var orderId = HttpContext.Session.GetString("OrderId");
-                var pitchId = HttpContext.Session.GetString("PitchId");
-                var selectedDate = DateTime.Parse(HttpContext.Session.GetString("FilterDate"));
-                var pricePitch = decimal.Parse(HttpContext.Session.GetString("PricePitch"));
+                var fieldId = HttpContext.Session.GetString("FieldId");
+                var selectedDate = DateTime.Parse(HttpContext.Session.GetString("SelectedDate"));
+                var priceField = decimal.Parse(HttpContext.Session.GetString("PriceField"));
                 var selectedTimes = HttpContext.Session.GetString("SelectedTimes")
                                       .Split(',').Select(int.Parse).ToList();
+                var userId = User.FindFirst("userId")?.Value;
+                Booking total = new Booking
+                {
+                    UserId = Int32.Parse(userId),
+                    FieldId = Int32.Parse(fieldId),
+                    BookingDate = DateOnly.FromDateTime(selectedDate),
+                    Status = "Booked",
+                    TotalPrice = selectedTimes.Count * priceField,
+                };
 
+                total = await _bookingRepository.CreateBooking(total);
                 for (int i = 0; i < selectedTimes.Count; i++)
                 {
-                    var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-                    TotalInvoicePitch total = new TotalInvoicePitch
+                    BookingTimeSlot invoicePitch = new BookingTimeSlot
                     {
-                        UserId = Int32.Parse(userId),
-                        BookTime = DateOnly.FromDateTime(selectedDate)
-                    };
-                    totalInvoicePitchRepository.CreateTotalInvoice(total);
-
-                    InvoicePitch invoicePitch = new InvoicePitch
-                    {
-                        PitchId = pitchId,
-                        PricePitchId = pitchRepository.GetPricePitchIdByPitchId(pitchId),
-                        TotalInvoiceId = total.TotalInvoiceId,
-                        BookingTimeId = selectedTimes[i]
+                        FieldId = Int32.Parse(fieldId),
+                        BookingId = total.BookingId,
+                        TimeslotId = selectedTimes[i],
+                        BookingDate = DateOnly.FromDateTime(selectedDate)
                     };
 
-                    invoicePitchRepository.CreateInvoicePitch(invoicePitch);
+                    await _bookingRepository.CreateBookingTimeSlot(invoicePitch);
 
                 }
 
                 HttpContext.Session.Remove("OrderId");
-                HttpContext.Session.Remove("PitchId");
-                HttpContext.Session.Remove("FilterDate");
-                HttpContext.Session.Remove("PricePitch");
+                HttpContext.Session.Remove("FieldId");
+                HttpContext.Session.Remove("SelectedDate");
+                HttpContext.Session.Remove("PriceField");
                 HttpContext.Session.Remove("SelectedTimes");
-                TempData["PitchId"] = pitchId;
+                TempData["FieldId"] = fieldId;
                 TempData["SelectedDate"] = DateOnly.FromDateTime(selectedDate).ToString("yyyy-MM-dd"); 
-                TempData["PricePitch"] = pricePitch.ToString();
+                TempData["PriceField"] = priceField.ToString();
+                TempData["SelectTime"] = selectedTimes.Count;
                 List<String> list = new List<String>();
-                for (int i = 0; i < selectedTimes.Count; i++) { 
-                    string booktime = bookingTimeRepository.GetTimeByBookingTimeId(selectedTimes[i]);
+                /*for (int i = 0; i < selectedTimes.Count; i++)
+                {
+                    string booktime = await _bookingRepository.GetTimeByBookingTimeId(selectedTimes[i]);
                     list.Add(booktime);
-                }
+                }*/
                 TempData["BookingTimes"] = string.Join(",", list);
-                
-                return RedirectToAction("ViewInvoice");
+
+                return RedirectToAction("ViewInvoice", "Payment");
             }
             else
             {
@@ -126,7 +120,7 @@ namespace ProjectPRN222_BL3_Project.Controllers
             public IActionResult ViewInvoice()
             {
                 return View();
-            }*/
+            }
         
     }
 }

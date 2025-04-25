@@ -5,13 +5,11 @@
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Create</h1>
-
-<h4>Field</h4>
+<h4>Create Field</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="FieldName" class="control-label"></label>
@@ -36,6 +34,11 @@
                     <option value="inactive">Inactive</option>
                 </select>
                 <span asp-validation-for="Status" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Image" class="control-label"></label>
+                <input type="file" name="imageFile" class="form-control" />
+                <span class="text-danger">@Html.ValidationMessage("ImageFile")</span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

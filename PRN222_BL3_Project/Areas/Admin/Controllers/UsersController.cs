@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BusinessObjects;
 using Microsoft.AspNetCore.Authorization;
-using Repositories.IRepositories;
+using Repositories;
 
 namespace PRN222_BL3_Project.Areas.Admin.Controllers
 {
@@ -25,10 +25,40 @@ namespace PRN222_BL3_Project.Areas.Admin.Controllers
         }
 
         // GET: Admin/Users
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int currentPage = 1, int pageSize = 4, string? search = null, string? sortBy = null)
         {
-            var users = _context.GetUsers().ToList();
-            return View(users);
+            var users = _context.GetUsers().AsQueryable();
+            ViewBag.Roles = _role.Roles.ToList();
+
+            //Search
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                users = users.Where(u => u.UserName.Contains(search) || u.Email.Contains(search));
+
+                var searchResultCount = users.Count();
+                if (searchResultCount == 0)
+                {
+                    ViewBag.NoResults = $"No results found for '{search}'.";
+                }
+            }
+
+            // Sort by role
+            if (!string.IsNullOrWhiteSpace(sortBy) && int.TryParse(sortBy, out int roleId))
+            {
+                users = users.Where(u => u.RoleId == roleId);
+            }
+
+            //Pagination
+            var itemCount = _context.GetUsers().Count();
+            var items = users.Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
+
+            // Pass data to view
+            ViewBag.CurrentPage = currentPage;
+            ViewBag.TotalPages = (int)Math.Ceiling(itemCount / (float)pageSize);
+            ViewBag.SearchQuery = search;
+            ViewBag.SortBy = sortBy;
+
+            return View(items);
         }
 
         // GET: Admin/Users/Create

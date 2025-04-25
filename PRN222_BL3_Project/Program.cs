@@ -2,8 +2,8 @@ using BusinessObjects;
 using DataAccessObjects;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
-using Repositories.IRepositories;
-using Repositories.Repositories;
+using ProjectPRN222_BL3_Project.Services;
+using Repositories;
 
 namespace PRN222_BL3_Project
 {
@@ -18,7 +18,8 @@ namespace PRN222_BL3_Project
 
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IFootballFieldRepository, FootballFieldRepository>();
-
+            builder.Services.AddScoped<IBookingRepository, BookingRepository>();
+            builder.Services.AddScoped<IVnPayService, VnPayService>();
             builder.Services.AddDbContext<FootballFieldBookingContext>(options =>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("FootballDB"));
@@ -37,7 +38,17 @@ namespace PRN222_BL3_Project
                      googleoptions.ClientId = builder.Configuration["Authentication:Google:ClientId"];
                      googleoptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
                  });
-
+            builder.Services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(30);
+                options.Cookie.HttpOnly = true;
+                options.IdleTimeout = TimeSpan.FromMinutes(30);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // Yêu c?u HTTPS
+                options.Cookie.SameSite = SameSiteMode.None; // C?n thi?t cho OAuth cross-site
+                options.Cookie.Name = ".AspNetCore.Session";
+            });
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -54,7 +65,7 @@ namespace PRN222_BL3_Project
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
-
+            app.UseSession();
             app.MapControllerRoute(
                 name: "areas",
                 pattern: "{area:exists}/{controller=Dashboard}/{action=Index}/{id?}");

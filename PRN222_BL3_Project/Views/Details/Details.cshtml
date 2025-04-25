@@ -1,0 +1,146 @@
+﻿@model FieldDetailsViewModel
+@{
+    ViewData["Title"] = $"{Model.Field?.FieldName} - SoccerRoof";
+}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="~/css/details.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+
+<body>
+    @* <!-- Navigation --> *@
+    @* <nav> *@
+    @*     <div class="nav-links"> *@
+    @*         <a asp-controller="Home" asp-action="Index">Home</a> *@
+    @*         <a href="#">Rent a field</a> *@
+    @*         <a href="#">News</a> *@
+    @*     </div> *@
+
+    @*     <div class="logo"> *@
+    @*         <img src="https://thetournament.com/wp-content/uploads/2023/12/SocceroofLogoBlack.png" style="height: 300px" alt="SoccerRoof Logo"> *@
+    @*     </div> *@
+
+    @*     <div class="nav-right"> *@
+    @*         <div class="language-selector"> *@
+    @*             <a asp-page="/Index" asp-route-culture="en">EN</a> | <a asp-page="/Index" asp-route-culture="vn">VN</a> *@
+    @*         </div> *@
+    @*         <div class="profile-icon">@(User.Identity.IsAuthenticated ? User.Identity.Name.Substring(0, 1) : "P")</div> *@
+    @*     </div> *@
+
+    @*     <div class="hamburger"> *@
+    @*         <div></div> *@
+    @*         <div></div> *@
+    @*         <div></div> *@
+    @*     </div> *@
+    @* </nav> *@
+
+    <div class="field-details-container" style="background-image: url('/Admin/uploads/footballFields/@Model.Field.Image');">
+        <div class="overlay-black"></div>
+        <div class="field-details-overlay">
+            <h1 class="field-details-title">@Model.Field.FieldName</h1>
+            <p class="field-details-address">@Model.Field.FieldType</p>
+            <p class="field-details-phone">@($"{Model.Field.Price:N0} ₫")</p>
+
+            @* <a href="/Booking/Create?fieldId=@Model.Field.FieldId" class="book-now-box">BOOK NOW</a> *@
+            @* <a asp-controller="Booking"
+               asp-action="Create"
+               asp-route-fieldId="@Model.Field.FieldId"
+               class="book-now-box">
+                BOOK NOW
+            </a> *@
+            <div class="booking-container" style="text-align: right;">
+                <form asp-controller="Booking" asp-action="Booking" method="post">
+                    <input type="hidden" name="fieldId" value="@Model.Field.FieldId" />
+                    <input type="date" name="selectedDate" id="bookingDate" class="booking-date"
+                           min="@DateTime.Today.ToString("yyyy-MM-dd")" required />
+                    <br /><br />
+                    <button type="submit" class="check-availability-btn">Check Availability</button>
+                </form>
+            </div>
+
+            <p class="availability-status" id="availabilityStatus"></p>
+
+            @* Thêm script để xử lý sự kiện khi chọn ngày và kiểm tra tính khả dụng *@
+            <script>
+                // Đặt giá trị min là hôm nay để chặn chọn ngày quá khứ
+                window.onload = function () {
+                    const today = new Date().toISOString().split('T')[0];
+                    document.getElementById("bookingDate").setAttribute("min", today);
+                };
+
+                function checkAvailability() {
+                    var selectedDate = document.getElementById('bookingDate').value;
+                    if (selectedDate) {
+                        document.getElementById('availabilityStatus').innerText = `Checking availability for ${selectedDate}...`;
+
+                        fetch(`/Booking/CheckAvailability?fieldId=@Model.Field.FieldId&date=${selectedDate}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.isAvailable) {
+                                    document.getElementById('availabilityStatus').innerText = '✅ The field is available for booking.';
+                                } else {
+                                    document.getElementById('availabilityStatus').innerText = '❌ Sorry, the field is not available on this date.';
+                                }
+                            })
+                            .catch(error => {
+                                document.getElementById('availabilityStatus').innerText = '⚠️ Error checking availability.';
+                            });
+                    } else {
+                        document.getElementById('availabilityStatus').innerText = '⚠️ Please select a date.';
+                    }
+                }
+            </script>
+
+
+            @* <div class="field-description"> *@
+            @*     <p><i class="fas fa-trophy"></i> 5 fields with the flexibility to combine 2 fields together</p> *@
+            @*     <p>Fields manufactured with next generation synthetic grass materials</p> *@
+            @*     <p><i class="fas fa-check"></i> Fully equipped with locker rooms, restrooms, a bar, café</p> *@
+            @*     <p>Bar – Lounge – Private Events</p> *@
+            @* </div> *@
+        </div>
+    </div>
+
+    <footer class="field-footer">
+        <div class="footer-content">
+            <div>
+                <h3>DEFINE YOUR SOCCER EXPERIENCE LIKE NEVER BEFORE</h3>
+                <a href="/index" class="btn-black">RENT A FIELD</a>
+            </div>
+            <div>
+                <h4>OUR LOCATIONS</h4>
+                <ul>
+                    @foreach (var location in Model.AllFields)
+                    {
+                        <li>
+                            <a asp-controller="Details" asp-action="Details" asp-route-id="@location.FieldId">
+                                @location.FieldName
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>
+            <div>
+                <h4>SUBSCRIBE TO OUR NEWSLETTER</h4>
+                <form asp-controller="Home" asp-action="Subscribe" method="post">
+                    <input type="email" name="email" placeholder="Your email..." required />
+                    <button type="submit">→</button>
+                </form>
+                <div class="socials">
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-tiktok"></i></a>
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+        <p style="text-align:center; margin-top: 30px;">© SOCCEROOF 2025. All rights reserved.</p>
+    </footer>
+
+    @* @section Scripts { *@
+    @*     <script src="~/js/details.js"></script> *@
+    @* } *@
+</body>

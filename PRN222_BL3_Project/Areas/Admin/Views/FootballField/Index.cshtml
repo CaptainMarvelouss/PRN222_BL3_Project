@@ -5,14 +5,31 @@
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
-<div class="row">
-    <div class="col-md-6">
-        <h3>Field Management</h3>
-        <p>
-            <a asp-action="Create">Create New</a>
-        </p>
+<div class="row" style="margin-top: -15px">
+    <div class="row col-md-6">
+        <div class="col-md-12">
+            <h4>Field Management</h4>
+            <div class="d-flex">
+                <p>
+                    <a asp-action="Create">Create New</a>
+                </p>
+                <form asp-action="Index" class="d-none d-md-flex ms-4">
+                    <div class="input-group">
+                        <input class="form-control border-0 search-input" type="search" name="search"
+                               placeholder="Search by field name" value="@ViewBag.SearchQuery">
+                        <button class="btn btn-outline-primary search-btn" type="submit">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+            
+        </div>
+        <div class="col-md-7" style="margin-left: -20px">
+            
+        </div>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-6">
         @if (TempData["FieldSuccess"] != null)
         {
             <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -28,6 +45,7 @@
 <table class="table">
     <thead>
         <tr>
+            <th></th>
             <th>
                 Field Name
             </th>
@@ -47,30 +65,78 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.FieldName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FieldType)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreatedAt)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.FieldId">Edit</a> |
-                <a asp-action="Delete" asp-route-id="@item.FieldId">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model) {
+            <tr>
+                <td>
+                    <img src="~/Admin/uploads/footballFields/@item.Image" class="field-image">
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FieldName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FieldType)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreatedAt)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.FieldId">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@item.FieldId">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+
+<!-- Pagination controls -->
+<div class="pagination mt-3 justify-content-center">
+    @{
+        var currentPage = ViewBag.CurrentPage;
+        var totalPages = ViewBag.TotalPages;
+    }
+    @if (totalPages > 1)
+    {
+        <ul class="pagination justify-content-center">
+            <!-- Previous Button -->
+            <li class="page-item @(currentPage == 1 ? "disabled" : "")">
+                <a class="page-link"
+                   asp-action="Index"
+                   asp-route-currentPage="@(currentPage - 1)"> Previous </a>
+            </li>
+
+            <!-- Page Numbers -->
+            @for (int i = 1; i <= totalPages; i++)
+            {
+                <li class="page-item @(currentPage == i ? "active" : "")">
+                    <a class="page-link"
+                       asp-action="Index"
+                       asp-route-currentPage="@i"> @i </a>
+                </li>
+            }
+
+            <!-- Next Button -->
+            <li class="page-item @(currentPage == totalPages ? "disabled" : "")">
+                <a class="page-link"
+                   asp-action="Index"
+                   asp-route-currentPage="@(currentPage + 1)"> Next </a>
+            </li>
+        </ul>
+    }
+</div>
+
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
+<style>
+    .field-image {
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+        vertical-align: middle;
+    }
+</style>
