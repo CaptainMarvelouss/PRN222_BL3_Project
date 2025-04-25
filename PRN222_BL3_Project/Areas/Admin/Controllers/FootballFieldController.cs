@@ -6,8 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BusinessObjects;
-using Repositories;
 using Microsoft.AspNetCore.Authorization;
+using Repositories;
 
 namespace PRN222_BL3_Project.Areas.Admin.Controllers
 {

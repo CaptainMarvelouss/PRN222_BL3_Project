@@ -29,4 +29,5 @@ public class DetailsController : Controller
 
         return View(viewModel);
     }
+
 }

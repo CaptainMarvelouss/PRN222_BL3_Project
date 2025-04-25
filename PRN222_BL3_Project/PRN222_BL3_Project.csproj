@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <Folder Include="Areas\Admin\Models\" />
+    <Folder Include="DTO\" />
     <Folder Include="wwwroot\Admin\uploads\footballFields\" />
     <Folder Include="wwwroot\Images\" />
   </ItemGroup>

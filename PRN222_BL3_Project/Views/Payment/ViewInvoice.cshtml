@@ -1,0 +1,110 @@
+﻿@model List<BusinessObjects.Booking>
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hóa Đơn Đặt Sân</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 600px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin: 50px auto;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        .invoice {
+            text-align: left;
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: #fafafa;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            background: #008CBA;
+            color: white;
+            padding: 8px;
+            margin: 5px 0;
+            border-radius: 5px;
+        }
+
+        .total {
+            font-size: 18px;
+            font-weight: bold;
+            color: #d9534f;
+            margin-top: 10px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 15px;
+            background: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+            .back-btn:hover {
+                background: #218838;
+            }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Hóa Đơn Đặt Sân</h2>
+
+        @if (TempData["BookingTimes"] != null)
+        {
+            var bookingTimes = TempData["BookingTimes"].ToString().Split(',');
+            var pricePitch = Convert.ToDecimal(TempData["PriceField"]);
+            var selectTime = Convert.ToInt32(TempData["SelectTime"]);
+            var total = pricePitch * selectTime;
+
+            <div class="invoice">
+                <p><strong>Mã sân:</strong> @TempData["FieldId"]</p>
+                <p><strong>Ngày đặt:</strong> @Convert.ToDateTime(TempData["SelectedDate"]).ToString("dd/MM/yyyy")</p>
+                <p><strong>Giá sân:</strong> @total VNĐ</p>
+
+                @* <h3>Khung giờ đặt sân:</h3>
+                <ul>
+                    @foreach (var time in bookingTimes)
+                    {
+                        <li>@time</li>
+                    }
+                </ul> *@
+
+                <p class="total">💰 Tổng tiền: @total VNĐ</p>
+            </div>
+        }
+        @* else
+        {
+            <p>Không có dữ liệu đặt sân.</p>
+        } *@
+
+        <a href="/Home/Index" class="back-btn">🔙 Trở về trang chủ</a>
+    </div>
+
+</body>
+</html>

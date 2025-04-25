@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace BusinessObjects;
 
@@ -12,10 +13,10 @@ public partial class BookingTimeSlot
     public int FieldId { get; set; }
 
     public DateOnly BookingDate { get; set; }
-
-    public virtual Booking Booking { get; set; } = null!;
-
-    public virtual Field Field { get; set; } = null!;
-
-    public virtual TimeSlot Timeslot { get; set; } = null!;
+    [JsonIgnore]
+    public virtual Booking? Booking { get; set; } = null!;
+    [JsonIgnore]
+    public virtual Field? Field { get; set; } = null!;
+    [JsonIgnore]
+    public virtual TimeSlot? Timeslot { get; set; } = null!;
 }

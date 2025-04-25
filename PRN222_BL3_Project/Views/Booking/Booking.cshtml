@@ -1,0 +1,117 @@
+﻿@model dynamic
+@{
+    ViewData["Title"] = "Booking";
+    var availableTimeSlots = ViewBag.AvailableTimeSlots as List<BusinessObjects.TimeSlot>;
+    DateTime? selectedDate = ViewBag.SelectedDate as DateTime?;
+    int? fieldId = ViewBag.FieldId as int?;
+}
+
+<h2>Book a Field</h2>
+
+<form method="post" asp-action="Booking">
+    <input type="hidden" name="fieldId" value="@fieldId" />
+
+    @* <div class="booking-container">
+        <label for="bookingDate">Select Date:</label>
+        <input type="date" id="bookingDate" name="selectedDate" class="booking-date"
+               min="@DateTime.Today.ToString("yyyy-MM-dd")"
+               value="@selectedDate?.ToString("yyyy-MM-dd")" required />
+        <button type="submit" class="check-availability-btn">Check Availability</button>
+    </div> *@
+</form>
+
+@if (availableTimeSlots != null)
+{
+    <hr />
+    <h3>Available Time Slots on @selectedDate?.ToString("dddd, MMM dd yyyy")</h3>
+
+    @if (availableTimeSlots.Count > 0)
+    {
+        <form method="post" asp-controller="Payment" asp-action="Checkout">
+            <input type="hidden" name="FieldId" value="@fieldId" />
+            <input type="hidden" name="PriceField" value="@ViewBag.priceField" />
+            <input type="hidden" name="SelectedDate" value="@selectedDate?.ToString("yyyy-MM-dd")" />
+
+            <div class="time-slots">
+                @foreach (var slot in availableTimeSlots)
+                {
+                    <div class="time-slot-option">
+                        <input type="checkbox" id="slot-@slot.TimeslotId" name="selectedTimes" value="@slot.TimeslotId" />
+                        <label for="slot-@slot.TimeslotId">
+                            @slot.StartTime.ToString("hh:mm tt") - @slot.EndTime.ToString("hh:mm tt")
+                        </label>
+                    </div>
+
+                }
+            </div>
+
+            <button type="submit" class="btn btn-primary">Book Now</button>
+        </form>
+    }
+    else
+    {
+        <p>No time slots available for this date.</p>
+    }
+}
+
+<style>
+    .booking-container {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+
+    .booking-date {
+        padding: 8px;
+        font-size: 1rem;
+    }
+
+    .check-availability-btn {
+        padding: 8px 16px;
+        font-size: 1rem;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+        .check-availability-btn:hover {
+            background-color: #0056b3;
+        }
+
+    .time-slots {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 20px;
+    }
+
+    .time-slot-option {
+        padding: 8px 14px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        background: #f7f7f7;
+    }
+
+        .time-slot-option input[type="radio"] {
+            margin-right: 6px;
+        }
+
+    .btn-primary {
+        margin-top: 20px;
+        padding: 10px 20px;
+        font-size: 1rem;
+        background-color: #28a745;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+        .btn-primary:hover {
+            background-color: #218838;
+        }
+</style>

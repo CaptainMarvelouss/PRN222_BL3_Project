@@ -37,13 +37,63 @@
     @*     </div> *@
     @* </nav> *@
 
-    <div class="field-details-container" style="background-image: url('/Images/@Model.Field.Image');">
+    <div class="field-details-container" style="background-image: url('/Admin/uploads/footballFields/@Model.Field.Image');">
+        <div class="overlay-black"></div>
         <div class="field-details-overlay">
             <h1 class="field-details-title">@Model.Field.FieldName</h1>
             <p class="field-details-address">@Model.Field.FieldType</p>
             <p class="field-details-phone">@($"{Model.Field.Price:N0} ₫")</p>
 
-            <a href="/Booking/Create?fieldId=@Model.Field.FieldId" class="book-now-box">BOOK NOW</a>
+            @* <a href="/Booking/Create?fieldId=@Model.Field.FieldId" class="book-now-box">BOOK NOW</a> *@
+            @* <a asp-controller="Booking"
+               asp-action="Create"
+               asp-route-fieldId="@Model.Field.FieldId"
+               class="book-now-box">
+                BOOK NOW
+            </a> *@
+            <div class="booking-container" style="text-align: right;">
+                <form asp-controller="Booking" asp-action="Booking" method="post">
+                    <input type="hidden" name="fieldId" value="@Model.Field.FieldId" />
+                    <input type="date" name="selectedDate" id="bookingDate" class="booking-date"
+                           min="@DateTime.Today.ToString("yyyy-MM-dd")" required />
+                    <br /><br />
+                    <button type="submit" class="check-availability-btn">Check Availability</button>
+                </form>
+            </div>
+
+            <p class="availability-status" id="availabilityStatus"></p>
+
+            @* Thêm script để xử lý sự kiện khi chọn ngày và kiểm tra tính khả dụng *@
+            <script>
+                // Đặt giá trị min là hôm nay để chặn chọn ngày quá khứ
+                window.onload = function () {
+                    const today = new Date().toISOString().split('T')[0];
+                    document.getElementById("bookingDate").setAttribute("min", today);
+                };
+
+                function checkAvailability() {
+                    var selectedDate = document.getElementById('bookingDate').value;
+                    if (selectedDate) {
+                        document.getElementById('availabilityStatus').innerText = `Checking availability for ${selectedDate}...`;
+
+                        fetch(`/Booking/CheckAvailability?fieldId=@Model.Field.FieldId&date=${selectedDate}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.isAvailable) {
+                                    document.getElementById('availabilityStatus').innerText = '✅ The field is available for booking.';
+                                } else {
+                                    document.getElementById('availabilityStatus').innerText = '❌ Sorry, the field is not available on this date.';
+                                }
+                            })
+                            .catch(error => {
+                                document.getElementById('availabilityStatus').innerText = '⚠️ Error checking availability.';
+                            });
+                    } else {
+                        document.getElementById('availabilityStatus').innerText = '⚠️ Please select a date.';
+                    }
+                }
+            </script>
+
 
             @* <div class="field-description"> *@
             @*     <p><i class="fas fa-trophy"></i> 5 fields with the flexibility to combine 2 fields together</p> *@

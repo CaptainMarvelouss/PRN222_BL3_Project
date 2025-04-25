@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace BusinessObjects;
 
@@ -18,10 +19,10 @@ public partial class Booking
     public decimal TotalPrice { get; set; }
 
     public DateTime? CreatedAt { get; set; }
-
-    public virtual ICollection<BookingTimeSlot> BookingTimeSlots { get; set; } = new List<BookingTimeSlot>();
-
-    public virtual Field Field { get; set; } = null!;
+    [JsonIgnore]
+    public virtual ICollection<BookingTimeSlot>? BookingTimeSlots { get; set; } = new List<BookingTimeSlot>();
+    [JsonIgnore]
+    public virtual Field? Field { get; set; } = null!;
 
     public virtual User User { get; set; } = null!;
 }
