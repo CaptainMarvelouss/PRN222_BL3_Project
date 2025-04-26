@@ -29,7 +29,12 @@
         <div class="language-selector">
             <a asp-page="/Index" asp-route-culture="en">EN</a> | <a asp-page="/Index" asp-route-culture="vn">VN</a>
         </div>
-        <div class="profile-icon">@(User.Identity.IsAuthenticated ? User.Identity.Name.Substring(0, 1) : "P")</div>
+        @* <div class="profile-icon">@(User.Identity.IsAuthenticated ? User.Identity.Name.Substring(0, 1) : "P")</div> *@
+
+
+        <a asp-controller="Profile" asp-action="Index" class="profile-icon">
+            @(User.Identity.IsAuthenticated ? User.Identity.Name.Substring(0, 1) : "P")
+        </a>
     </div>
 
     <div class="hamburger">

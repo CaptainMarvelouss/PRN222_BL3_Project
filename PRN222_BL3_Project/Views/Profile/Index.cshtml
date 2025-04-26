@@ -1,0 +1,107 @@
+﻿@model BusinessObjects.User
+
+@{
+    ViewData["Title"] = "My Profile";
+}
+
+<div class="container mt-5">
+    <h2 class="mb-4">My Profile</h2>
+
+    <div class="card shadow p-4">
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Username:</label>
+                <p class="form-control">@Model.UserName</p>
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Email:</label>
+                <p class="form-control">@Model.Email</p>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Password:</label>
+                <p class="form-control">@Model.PasswordHash</p>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Phone:</label>
+                <p class="form-control">@Model.Phone</p>
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Joined At:</label>
+                <p class="form-control">@Model.CreatedAt?.ToString("dd/MM/yyyy")</p>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Status:</label>
+                <p class="form-control">@((Model.IsBlocked ?? false) ? "Blocked" : "Active")</p>
+            </div>
+        </div>
+
+        <div class="text-end">
+            <a asp-action="Update" asp-controller="Profile" class="btn btn-primary">Update Profile</a>
+        </div>
+    </div>
+</div>
+
+<!-- Success Modal -->
+<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title" id="successModalLabel">Success</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                @TempData["SuccessMessage"]
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" data-bs-dismiss="modal">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Error Modal -->
+<div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="errorModalLabel">Error</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                @TempData["ErrorMessage"]
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <text>
+                            var successModal = new bootstrap.Modal(document.getElementById('successModal'));
+                            successModal.show();
+            </text>
+        }
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <text>
+                            var errorModal = new bootstrap.Modal(document.getElementById('errorModal'));
+                            errorModal.show();
+            </text>
+        }
+        });
+    </script>
+}
