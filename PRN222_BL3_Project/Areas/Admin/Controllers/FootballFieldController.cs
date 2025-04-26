@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using BusinessObjects;
 using Microsoft.AspNetCore.Authorization;
 using Repositories;
+using Microsoft.AspNetCore.SignalR;
+using PRN222_BL3_Project.Hubs;
 
 namespace PRN222_BL3_Project.Areas.Admin.Controllers
 {
@@ -110,6 +112,12 @@ namespace PRN222_BL3_Project.Areas.Admin.Controllers
 
                 field.Image = fileName;
                 _context.AddFootballField(field);
+
+                // Gửi thông báo qua SignalR
+                var hubContext = HttpContext.RequestServices.GetService<IHubContext<NotificationHub>>();
+                await hubContext.Clients.All.SendAsync("ReceiveFieldCreationNotification",
+                    $"Football Field '{field.FieldName}' created successfully!");
+
                 TempData["FieldSuccess"] = "Field created successfully.";
                 return RedirectToAction(nameof(Index));
             }
