@@ -7,12 +7,40 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/PRN222_BL3_Project.styles.css" asp-append-version="true" />
+    <style>
+        .notification-container {
+            position: fixed !important;
+            top: 20px !important;
+            right: 20px !important;
+            z-index: 9999 !important;
+            max-width: 300px;
+        }
+
+        .notification-toast {
+            background-color: #28a745;
+            color: white;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+            .notification-toast.show {
+                opacity: 1;
+            }
+
+            .notification-toast .btn-close {
+                filter: invert(1);
+            }
+    </style>
 </head>
 <body>
+    <div class="notification-container" id="notificationContainer"></div>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                @* <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">PRN222_BL3_Project</a> *@
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -22,9 +50,6 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                        @* <li class="nav-item"> *@
-                        @*     <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a> *@
-                        @* </li> *@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Auth" asp-action="Login">Login</a>
                         </li>
@@ -41,15 +66,51 @@
             @RenderBody()
         </main>
     </div>
-
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2025 - PRN222_BL3_Project - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            © 2025 - PRN222_BL3_Project - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.0/signalr.min.js"></script>
+    <script>
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/notificationHub").build();
+
+        connection.on("ReceiveFieldCreationNotification", function (message) {
+            const toast = document.createElement("div");
+            toast.className = "notification-toast";
+            toast.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            `;
+            const container = document.getElementById("notificationContainer");
+            if (container) {
+                container.appendChild(toast);
+                setTimeout(() => {
+                    toast.classList.add("show");
+                }, 100);
+                setTimeout(() => {
+                    toast.classList.remove("show");
+                    setTimeout(() => toast.remove(), 300);
+                }, 60000);
+                toast.querySelector(".btn-close").addEventListener("click", () => {
+                    toast.classList.remove("show");
+                    setTimeout(() => toast.remove(), 300);
+                });
+            } else {
+                console.error("notificationContainer not found in DOM");
+            }
+        });
+
+        connection.start().then(() => {
+            connection.invoke("JoinUserGroup").catch(err => console.error("JoinUserGroup failed: ", err));
+        }).catch(err => {
+            console.error("SignalR connection failed: ", err.toString());
+        });
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
