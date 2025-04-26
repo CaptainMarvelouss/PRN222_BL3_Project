@@ -2,6 +2,7 @@ using BusinessObjects;
 using DataAccessObjects;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
+using PRN222_BL3_Project.Hubs;
 using ProjectPRN222_BL3_Project.Services;
 using Repositories;
 
@@ -49,6 +50,9 @@ namespace PRN222_BL3_Project
                 options.Cookie.SameSite = SameSiteMode.None; // C?n thi?t cho OAuth cross-site
                 options.Cookie.Name = ".AspNetCore.Session";
             });
+
+            builder.Services.AddSignalR();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -66,6 +70,9 @@ namespace PRN222_BL3_Project
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseSession();
+
+            app.MapHub<NotificationHub>("/notificationHub");
+
             app.MapControllerRoute(
                 name: "areas",
                 pattern: "{area:exists}/{controller=Dashboard}/{action=Index}/{id?}");
