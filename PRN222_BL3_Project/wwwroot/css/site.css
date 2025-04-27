@@ -1,4 +1,4 @@
-html {
+﻿html {
   font-size: 14px;
 }
 
@@ -19,4 +19,44 @@ html {
 
 body {
   margin-bottom: 60px;
+}
+.profile-container {
+    position: relative;
+    display: inline-block;
+}
+
+.profile-dropdown {
+    display: none; /* Ẩn menu */
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    min-width: 160px;
+    z-index: 1;
+}
+
+    .profile-dropdown ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+    }
+
+        .profile-dropdown ul li {
+            padding: 8px 16px;
+        }
+
+            .profile-dropdown ul li a {
+                text-decoration: none;
+                color: #333;
+                display: block;
+            }
+
+                .profile-dropdown ul li a:hover {
+                    background-color: #ddd;
+                }
+
+.profile-container:hover .profile-dropdown {
+    display: block; /* Hiển thị menu khi di chuột vào profile */
 }

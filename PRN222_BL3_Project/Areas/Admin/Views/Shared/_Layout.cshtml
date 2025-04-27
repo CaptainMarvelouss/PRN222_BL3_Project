@@ -6,42 +6,39 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Admin Management</title>
-    <!-- [Favicon] icon -->
-    <link rel="icon" href="~/Admin/assets/images/favicon.svg" type="image/x-icon"> <!-- [Google Font] Family -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&display=swap" id="main-font-link">
-    <!-- [Tabler Icons] https://tablericons.com -->
+
+    <link rel="icon" href="~/Admin/assets/images/favicon.svg" type="image/x-icon">
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&amp;display=swap"
+          id="main-font-link">
     <link rel="stylesheet" href="~/Admin/assets/fonts/tabler-icons.min.css">
-    <!-- [Feather Icons] https://feathericons.com -->
     <link rel="stylesheet" href="~/Admin/assets/fonts/feather.css">
-    <!-- [Font Awesome Icons] https://fontawesome.com/icons -->
     <link rel="stylesheet" href="~/Admin/assets/fonts/fontawesome.css">
-    <!-- [Material Icons] https://fonts.google.com/icons -->
     <link rel="stylesheet" href="~/Admin/assets/fonts/material.css">
-    <!-- [Template CSS Files] -->
     <link rel="stylesheet" href="~/Admin/assets/css/style.css" id="main-style-link">
     <link rel="stylesheet" href="~/Admin/assets/css/style-preset.css">
 </head>
 
 <body data-pc-preset="preset-1" data-pc-direction="ltr" data-pc-theme="light">
     <div class="loader-bg">
-        <div class="loader-track">
-            <div class="loader-fill"></div>
-        </div>
+        <div class="loader-track"><div class="loader-fill"></div></div>
     </div>
-   
-    <!-- [ Sidebar Menu ] start -->
+
+    <!-- Sidebar Menu -->
     <nav class="pc-sidebar">
         <div class="navbar-wrapper">
             <div class="m-header">
                 <a href="#" class="b-brand text-primary">
-                    <!-- ========   Change your logo from here   ============ -->
-                    <img src="/Admin/assets/images/logo-dark.svg" class="img-fluid logo-lg" alt="logo">
+                    <img src="~/Admin/assets/images/logo-dark.svg" class="img-fluid logo-lg" alt="logo">
                 </a>
             </div>
             <div class="navbar-content">
                 <ul class="pc-navbar">
                     <li class="pc-item">
-                        <a asp-controller="Dashboard" asp-action="Index" class="pc-link">
+                        <a asp-area="Admin"
+                           asp-controller="Dashboard"
+                           asp-action="Index"
+                           class="pc-link">
                             <span class="pc-micon"><i class="ti ti-dashboard"></i></span>
                             <span class="pc-mtext">Dashboard</span>
                         </a>
@@ -51,30 +48,46 @@
                         <label>UI Components</label>
                         <i class="ti ti-dashboard"></i>
                     </li>
+
+                    <!-- Booking History link -->
                     <li class="pc-item">
-                        <a href="#" class="pc-link">
-                            <span class="pc-micon"><i class="ti ti-color-swatch"></i></span>
+                        <a asp-area="Admin"
+                           asp-controller="BookingHistory"
+                           asp-action="Index"
+                           class="pc-link">
+                            <span class="pc-micon"><i class="ti ti-history"></i></span>
                             <span class="pc-mtext">Booking History</span>
                         </a>
                     </li>
+
                     <li class="pc-item">
-                        <a asp-controller="FootballField" asp-action="Index" class="pc-link">
+                        <a asp-area="Admin"
+                           asp-controller="FootballField"
+                           asp-action="Index"
+                           class="pc-link">
                             <span class="pc-micon"><i class="ti ti-color-swatch"></i></span>
                             <span class="pc-mtext">Field Management</span>
                         </a>
                     </li>
+
                     <li class="pc-item">
-                        <a asp-controller="Users" asp-action="Index" class="pc-link">
+                        <a asp-area="Admin"
+                           asp-controller="Users"
+                           asp-action="Index"
+                           class="pc-link">
                             <span class="pc-micon"><i class="ti ti-color-swatch"></i></span>
                             <span class="pc-mtext">User Management</span>
                         </a>
                     </li>
+
                     <li class="pc-item">
-                        <a href="#" class="pc-link">
-                            <span class="pc-micon"><i class="ti ti-color-swatch"></i></span>
+                        <a asp-area="Admin" asp-controller="Dashboard" asp-action="Revenue" class="pc-link">
+                            <span class="pc-micon"><i class="ti ti-wallet"></i></span>
                             <span class="pc-mtext">Revenue</span>
                         </a>
                     </li>
+
+
                     <li class="pc-item pc-caption">
                         <label>Pages</label>
                         <i class="ti ti-news"></i>
@@ -95,14 +108,12 @@
             </div>
         </div>
     </nav>
-    <!-- [ Sidebar Menu ] end -->
-    <!-- [ Header Topbar ] start -->
+    <!-- End Sidebar -->
+    <!-- Header Topbar -->
     <header class="pc-header">
         <div class="header-wrapper">
-            <!-- [Mobile Media Block] start -->
             <div class="me-auto pc-mob-drp">
                 <ul class="list-unstyled">
-                    <!-- ======= Menu collapse Icon ===== -->
                     <li class="pc-h-item pc-sidebar-collapse">
                         <a href="#" class="pc-head-link ms-0" id="sidebar-hide">
                             <i class="ti ti-menu-2"></i>
@@ -110,19 +121,34 @@
                     </li>
                 </ul>
             </div>
-            <!-- [Mobile Media Block end] -->
             <div class="ms-auto">
                 <ul class="list-unstyled">
-                    <li class="dropdown pc-h-item header-user-profile">
+                    <li class="dropdown pc-h-item header-user-
+
+
+
+
+
+">
                         <a class="pc-head-link dropdown-toggle arrow-none me-0">
                             @if (!User.Identity.IsAuthenticated)
                             {
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Auth" asp-action="Login">Login</a>
+                                <a class="nav-link text-dark"
+                                   asp-area=""
+                                   asp-controller="Auth"
+                                   asp-action="Login">
+                                    Login
+                                </a>
                             }
                             else
                             {
                                 <span>Hi, @User.FindFirstValue(ClaimTypes.Name)</span>
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Auth" asp-action="Logout"> || Logout</a>
+                                <a class="nav-link text-dark"
+                                   asp-area=""
+                                   asp-controller="Auth"
+                                   asp-action="Logout">
+                                    || Logout
+                                </a>
                             }
                         </a>
                     </li>
@@ -130,38 +156,40 @@
             </div>
         </div>
     </header>
-    <!-- [ Header ] end -->
-    <!-- [ Main Content ] start -->
+    <!-- End Header -->
+    <!-- Main Content -->
     <div class="pc-container">
         <div class="pc-content">
-          <!-- [ breadcrumb ] start -->
-          <div class="page-header">
-            <div class="page-block">
-              <div class="row align-items-center">
-                <div class="col-md-12">
-                  <div class="page-header-title">
-                    <h5 class="m-b-10">Home</h5>
-                  </div>
-                  <ul class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="../dashboard/index.html">Home</a></li>
-                    <li class="breadcrumb-item"><a href="javascript: void(0)">Dashboard</a></li>
-                    <li class="breadcrumb-item" aria-current="page">Home</li>
-                  </ul>
+            <!-- Breadcrumb -->
+            <div class="page-header">
+                <div class="page-block">
+                    <div class="row align-items-center">
+                        <div class="col-md-12">
+                            <div class="page-header-title">
+                                <h5 class="m-b-10">@ViewData["Title"]</h5>
+                            </div>
+                            <ul class="breadcrumb">
+                                <li class="breadcrumb-item">
+                                    <a asp-area="Admin"
+                                       asp-controller="Dashboard"
+                                       asp-action="Index">Home</a>
+                                </li>
+                                <li class="breadcrumb-item" aria-current="page">
+                                    @ViewData["Title"]
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
-              </div>
             </div>
-          </div>
-          <!-- [ breadcrumb ] end -->
-
+            <!-- End Breadcrumb -->
             @RenderBody()
         </div>
     </div>
-    <!-- [ Main Content ] end -->
-
-    <!-- [Page Specific JS] start -->
+    <!-- End Main Content -->
+    <!-- Page Specific JS -->
     <script src="~/Admin/assets/js/plugins/apexcharts.min.js"></script>
     <script src="~/Admin/assets/js/pages/dashboard-default.js"></script>
-    <!-- [Page Specific JS] end -->
     <!-- Required Js -->
     <script src="~/Admin/assets/js/plugins/popper.min.js"></script>
     <script src="~/Admin/assets/js/plugins/simplebar.min.js"></script>

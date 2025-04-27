@@ -1,0 +1,46 @@
+﻿@model IEnumerable<BookingHistoryViewModel>
+@{
+    ViewData["Title"] = "Lịch sử đặt sân của bạn";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form method="get" class="row g-2 mb-3">
+    <div class="col-auto">
+        <input type="text" name="keyword" value="@ViewData["Keyword"]" class="form-control"
+               placeholder="Tìm theo tên sân…" />
+    </div>
+    <div class="col-auto">
+        <input type="date" name="fromDate" value="@ViewData["FromDate"]" class="form-control" />
+    </div>
+    <div class="col-auto">
+        <input type="date" name="toDate" value="@ViewData["ToDate"]" class="form-control" />
+    </div>
+    <div class="col-auto">
+        <button type="submit" class="btn btn-primary">Tìm</button>
+    </div>
+</form>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Ngày đặt</th>
+            <th>Sân</th>
+            <th>Khung giờ</th>
+            <th>Giá</th>
+            <th>Trạng thái</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var b in Model)
+        {
+            <tr>
+                <td>@b.BookingDate.ToString("yyyy-MM-dd")</td>
+                <td>@b.FieldName</td>
+                <td>@b.TimeSlots</td>
+                <td>@b.TotalPrice.ToString("N0")</td>
+                <td>@b.Status</td>
+            </tr>
+        }
+    </tbody>
+</table>
